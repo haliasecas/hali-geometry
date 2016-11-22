@@ -11,14 +11,14 @@ class Point{
 		Point(double, double);
 		Point(double, double, double);
 
-		void printP();
-		void stDim(int = 1);
-		void stPoint(double = 0, double = 0, double = 0);
-		double gD();
-		double gX();
-		double gY();
-		double gZ();
-		
+		void printPoint();
+		void setDim(int = 1);
+		void setPoint(double = 0, double = 0, double = 0);
+		double getD();
+		double getX();
+		double getY();
+		double getZ();
+
 		double distance(const Point);
 };
 

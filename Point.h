@@ -29,10 +29,6 @@ class Point {
       return sqrt(pow(x - p.x, 2) + pow(y - p.y, 2) + pow(z - p.z, 2));
     }
 
-    double distance(const Point &p) {
-      return sqrt(pow(x - p.x, 2) + pow(y - p.y, 2) + pow(z - p.z, 2));
-    }
-
     bool operator<(const Point &p) {
       return p.zeroDistance < this->zeroDistance;
     }
@@ -42,7 +38,7 @@ class Point {
 std::ostream &operator<<(std::ostream &out, Point &p) {
   std::streamsize oldp = out.precision();
   out << std::fixed << std::setprecision(3);
-  int dim = p.getDim();
+  int dimension = p.dimension;
   out << '(';
   if (dimension == 1) out << p.x;
   else if (dimension == 2) out << p.x << ',' << p.y;

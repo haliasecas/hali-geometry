@@ -1,3 +1,7 @@
+#ifndef INF
+double INF = std::numeric_limits<float>::infinity();
+#endif
+
 #ifndef POINT_H
 #define POINT_H
 
@@ -8,7 +12,8 @@ class Point {
     double zeroDistance;
 
     Point(double x1 = 0):
-      dimension(1), x(x1), y(0), z(0), zeroDistance(sqrt(x1 * x1)) {}
+      dimension(1), x(x1), y(0), z(0),
+      zeroDistance(sqrt(x1 * x1)) {}
 
     Point(double x1, double y1):
       dimension(2), x(x1), y(y1), z(0),
@@ -29,13 +34,25 @@ class Point {
       return sqrt(pow(x - p.x, 2) + pow(y - p.y, 2) + pow(z - p.z, 2));
     }
 
-    bool operator<(const Point &p) {
-      return p.zeroDistance < this->zeroDistance;
+    inline bool operator<(const Point &pointB) const {
+      return this->zeroDistance < pointB.zeroDistance;
     }
 
+    inline bool operator>(const Point &pointB) const { return pointB < *this; }
+    inline bool operator>=(const Point &pointB) const { return !(*this < pointB); }
+    inline bool operator<=(const Point &pointB) const { return !(*this > pointB); }
+
+    inline bool operator==(const Point &pointB) const {
+      if (this->x != pointB.x) return false;
+      if (this->y != pointB.y) return false;
+      if (this->z != pointB.z) return false;
+      return true;
+    }
+
+    inline bool operator!=(const Point &pointB) const { return !(*this == pointB); }
 };
 
-std::ostream &operator<<(std::ostream &out, Point &p) {
+std::ostream &operator<<(std::ostream &out, const Point &p) {
   std::streamsize oldp = out.precision();
   out << std::fixed << std::setprecision(3);
   int dimension = p.dimension;

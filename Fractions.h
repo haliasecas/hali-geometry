@@ -5,40 +5,40 @@
 
 class Fraction {
   private:
-    int _numerator, _denominator;
+    long long _numerator, _denominator;
 
   public:
-    Fraction(int numerator, int denominator) {
+    Fraction(long long numerator, long long denominator) {
       denominator = denominator != 0 ? denominator : 1;
 
-      int gcd = std::__gcd(numerator, denominator);
+      long long gcd = std::__gcd(numerator, denominator);
       _numerator = numerator / gcd;
       _denominator = denominator / gcd;
     }
 
-    Fraction(int numerator = 1): Fraction(numerator, 1) {}
+    Fraction(long long numerator = 1): Fraction(numerator, 1) {}
 
     // Getters y setters
-    inline int numerator() const {
+    inline long long numerator() const {
       return this->_numerator;
     }
 
-    inline void numerator(int _numerator) {
+    inline void numerator(long long _numerator) {
       this->_numerator = _numerator;
     }
 
-    inline int denominator() const {
+    inline long long denominator() const {
       return this->_denominator;
     }
 
-    inline void denominator(int _denominator) {
+    inline void denominator(long long _denominator) {
       this->_denominator = (_denominator != 0 ? _denominator : 1);
     }
 
     // Functions
     void simplify() {
       if (_denominator != 0) {
-        int gcd = std::__gcd(_numerator, _denominator);
+        long long gcd = std::__gcd(_numerator, _denominator);
         _numerator /= gcd;
         _denominator /= gcd;
       }
@@ -46,14 +46,14 @@ class Fraction {
 
     // Operator overloading
     Fraction &operator+=(const Fraction &fractionB) {
-      int denominatorA = this->_denominator;
-      int denominatorB = fractionB._denominator;
-      int lcm = (denominatorA * denominatorB) / std::__gcd(denominatorA, denominatorB);
+      long long denominatorA = this->_denominator;
+      long long denominatorB = fractionB._denominator;
+      long long lcm = (denominatorA * denominatorB) / std::__gcd(denominatorA, denominatorB);
 
       this->_numerator = (this->_numerator * lcm) + (fractionB._numerator * lcm);
       this->_denominator = lcm;
 
-      int gcd = std::__gcd(this->_numerator, this->_denominator);
+      long long gcd = std::__gcd(this->_numerator, this->_denominator);
       this->_numerator /= gcd;
       this->_denominator /= gcd;
       return *this;
@@ -64,16 +64,26 @@ class Fraction {
       return fractionA;
     }
 
-    Fraction &operator+=(const int &number) {
+    Fraction &operator+=(const long long &number) {
       this->_numerator += number * this->_denominator;
 
-      int gcd = std::__gcd(this->_numerator, this->_denominator);
+      long long gcd = std::__gcd(this->_numerator, this->_denominator);
       this->_numerator /= gcd;
       this->_denominator /= gcd;
       return *this;
     }
 
-    friend Fraction operator+(Fraction fractionA, const int &number) {
+    Fraction &operator=(const double &doubleNumber) {
+      double fraction = doubleNumber;
+      long precision = 1000000000L;
+      long gcd = std::__gcd(long(round(fraction * precision)), long(precision));
+
+      this->_numerator = round(fraction * precision) / gcd;
+      this->_denominator = precision / gcd;
+      return *this;
+    }
+
+    friend Fraction operator+(Fraction fractionA, const long long &number) {
       fractionA += number;
       return fractionA;
     }

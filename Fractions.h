@@ -2,6 +2,7 @@
 #define FRACTION_H
 
 #include <algorithm>
+#include <cmath>
 
 class Fraction {
   private:
@@ -86,6 +87,10 @@ class Fraction {
     friend Fraction operator+(Fraction fractionA, const long long &number) {
       fractionA += number;
       return fractionA;
+    }
+
+    bool operator<(const Fraction &fraction) {
+      return (this->_numerator * fraction._denominator) < (this->_denominator * fraction._numerator);
     }
 };
 

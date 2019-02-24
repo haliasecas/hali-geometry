@@ -1,9 +1,15 @@
-#ifndef INF
-double INF = std::numeric_limits<float>::infinity();
+#ifndef INF_H
+#define INF_H
+const double INF = std::numeric_limits<float>::infinity();
 #endif
 
 #ifndef POINT_H
 #define POINT_H
+
+template<class T>
+T pow2(const T &val) {
+  return val * val;
+}
 
 class Point {
   public:
@@ -30,40 +36,23 @@ class Point {
       if (z1 > 0) dimension = 3;
     }
 
-    double distance(const Point &p) {
-      return sqrt(pow(x - p.x, 2) + pow(y - p.y, 2) + pow(z - p.z, 2));
+    double distance(const Point &pb) {
+      return sqrt(pow2(x - pb.x) + pow2(y - pb.y) + pow2(z - pb.z));
     }
 
-    inline bool operator<(const Point &pointB) const {
-      return this->zeroDistance < pointB.zeroDistance;
+    inline bool operator<(const Point &pb) const {
+      return this->zeroDistance < pb.zeroDistance;
     }
 
-    inline bool operator>(const Point &pointB) const { return pointB < *this; }
-    inline bool operator>=(const Point &pointB) const { return !(*this < pointB); }
-    inline bool operator<=(const Point &pointB) const { return !(*this > pointB); }
+    inline bool operator>(const Point &pb) const { return pb < *this; }
+    inline bool operator>=(const Point &pb) const { return !(*this < pb); }
+    inline bool operator<=(const Point &pb) const { return !(*this > pb); }
 
-    inline bool operator==(const Point &pointB) const {
-      if (this->x != pointB.x) return false;
-      if (this->y != pointB.y) return false;
-      if (this->z != pointB.z) return false;
-      return true;
+    inline bool operator==(const Point &pb) const {
+      return (this->x == pb.x && this->y == pb.y && this->z == pb.z);
     }
 
-    inline bool operator!=(const Point &pointB) const { return !(*this == pointB); }
+    inline bool operator!=(const Point &pb) const { return !(*this == pb); }
 };
-
-std::ostream &operator<<(std::ostream &out, const Point &p) {
-  std::streamsize oldp = out.precision();
-  out << std::fixed << std::setprecision(3);
-  int dimension = p.dimension;
-  out << '(';
-  if (dimension == 1) out << p.x;
-  else if (dimension == 2) out << p.x << ',' << p.y;
-  else out << p.x << ',' << p.y << ',' << p.z;
-  out << ')';
-  out << std::setprecision(oldp);
-
-  return out;
-}
 
 #endif

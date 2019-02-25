@@ -1,26 +1,26 @@
 #ifndef LINE_H
 #define LINE_H
+
 #include <algorithm>
+#include <cmath>
 #include "Fraction.h"
 
 class Line {
   public:
     Point pointA, pointB;
-    double slope;
-    double b;
     double length;
+    long long A, B, C;
 
-    Line(Point p1 = 0, Point p2 = 0) {
-      pointA = p1;
-      pointB = p2;
-      if (pointA != pointB) {
-        slope = (pointA.y - pointB.y) / (pointA.x - pointB.x);
-        b = pointA.y - (slope * pointA.x);
-      }
-      else {
-        slope = INF;
-        b = pointA.x;
-      }
+    Line(Point pA = 0, Point pB = 0) {
+      pointA = pA, pointB = pB;
+      A = pA.y - pB.y;
+      B = pB.x - pA.x;
+      C = (pA.x * pB.y) + (pA.y * ((2 * pA.x) - pB.x));
+      length = pA.distance(pB);
+    }
+
+    Fraction distance(Point &pA) {
+      return Fraction(A * pA.x + B * pA.y + C, sqrt(A * A + B * B));
     }
 };
 

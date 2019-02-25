@@ -7,6 +7,9 @@ const double INF = std::numeric_limits<float>::infinity();
 #define FRACTION_H
 
 #include <algorithm>
+#include <string>
+#include <cstring>
+#include <sstream>
 #include <cmath>
 
 class Fraction {
@@ -14,13 +17,21 @@ class Fraction {
     long long _n, _d;
 
   public:
+    Fraction(double fraction = 0) {
+      long long precision = 1000000L;
+      long rFrac = long(round(fraction * precision));
+
+      long gcd = std::__gcd(rFrac, long(precision));
+
+      this->_n = rFrac / gcd;
+      this->_d = precision / gcd;
+    }
+
     Fraction(long long n, long long d) {
       _n = n;
       _d = d;
       reduce();
     }
-
-    Fraction(long long n = 1): Fraction(n, 1) {}
 
     // Getters y setters
     inline long long numerator() const {
@@ -51,9 +62,7 @@ class Fraction {
         _n = _d < 0 ? -_n : _n;
         _d = _d < 0 ? -_d : _d;
       }
-      else {
-        throw "Divide by zero exception";
-      }
+      else throw "Divide by zero exception";
     }
 
     // Operator overloading
@@ -94,14 +103,20 @@ class Fraction {
       return *this;
     }
 
-    Fraction &operator=(const double &doubleNumber) {
-      double fraction = doubleNumber;
-      long precision = 1000000000L;
-      long gcd = std::__gcd(long(round(fraction * precision)), long(precision));
+    operator double() {
+      if (this->_d != 0) {
+        return this->_n / (this->_d * 1.0);
+      }
+      throw "Divide by zero exception";
+    }
 
-      this->_n = round(fraction * precision) / gcd;
-      this->_d = precision / gcd;
-      return *this;
+    friend Fraction operator*(Fraction fA, const long long &n) {
+      fA.numerator(fA._n * n);
+      return fA;
+    }
+
+    friend Fraction operator*(Fraction fA, const Fraction &fB) {
+      return Fraction(fA._n * fB._n, fA._d * fB._d);
     }
 
     friend Fraction operator+(Fraction fA, const long long &number) {
@@ -111,6 +126,12 @@ class Fraction {
 
     bool operator<(const Fraction &fraction) {
       return (this->_n * fraction._d) < (this->_d * fraction._n);
+    }
+
+    operator std::string() const {
+      std::stringstream ss;
+      ss << this->_n << '/' << this->_d;
+      return ss.str();
     }
 };
 
